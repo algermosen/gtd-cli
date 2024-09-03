@@ -61,3 +61,11 @@ What I need to store?
 - Date when done
 - Date when created
 - List type / Task type (inbox, action, someday, tickler)
+
+## Tasks
+
+- [ ] File Store implementation
+- [ ] File Store Seed Data
+- [ ] Add new tasks
+- [ ] Check Command (List tasks)
+- [ ] Check Command (Check tasks)
