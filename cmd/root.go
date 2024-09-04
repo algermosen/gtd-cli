@@ -2,10 +2,13 @@ package cmd
 
 import (
 	"fmt"
+	"gtd/data"
 	"os"
 
 	"github.com/spf13/cobra"
 )
+
+var store data.Store
 
 var root = &cobra.Command{
 	Use:   "gtd",
@@ -18,6 +21,8 @@ func run(cmd *cobra.Command, args []string) {
 }
 
 func Execute() {
+	dbUrl := os.Getenv("DB_URL")
+	store = data.NewSqliteStore(dbUrl)
 	err := root.Execute()
 	if err != nil {
 		fmt.Printf("Error running application: %v", err)

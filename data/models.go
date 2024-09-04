@@ -17,21 +17,6 @@ func (t TaskType) Int() int64 {
 	return int64(t)
 }
 
-func TaskTypeFrom(t int64) TaskType {
-	switch t {
-	case int64(InboxTask):
-		return InboxTask
-	case int64(ActionTask):
-		return ActionTask
-	case int64(SomedayTask):
-		return SomedayTask
-	case int64(TicklerTask):
-		return TicklerTask
-	default:
-		return InboxTask
-	}
-}
-
 type Task struct {
 	Id      Id
 	Name    string
@@ -45,5 +30,20 @@ func ParseUnixDate(sec interface{}) time.Time {
 		return time.Unix(t, 0)
 	} else {
 		return time.Time{}
+	}
+}
+
+func TaskTypeFrom(t int64) TaskType {
+	switch t {
+	case int64(InboxTask):
+		return InboxTask
+	case int64(ActionTask):
+		return ActionTask
+	case int64(SomedayTask):
+		return SomedayTask
+	case int64(TicklerTask):
+		return TicklerTask
+	default:
+		return InboxTask
 	}
 }

@@ -5,6 +5,9 @@ import (
 	"database/sql"
 	database "gtd/data/sqlite"
 	"log"
+	"time"
+
+	_ "github.com/mattn/go-sqlite3"
 )
 
 func NewSqliteStore(path string) Store {
@@ -64,20 +67,18 @@ func (s *sqliteStore) Ticklers() []Task {
 	return parseTasks(tasks)
 }
 
-func (s *sqliteStore) Add(task *Task) error {
+func (s *sqliteStore) Add(task string) error {
 	params := database.CreateTaskParams{
-		Name:    task.Name,
-		Done:    task.Done.Unix(),
-		Created: task.Created.Unix(),
-		Type:    task.Type.Int(),
+		Name:    task,
+		Created: time.Now().Unix(),
+		Type:    InboxTask.Int(),
 	}
-	id, err := s.CreateTask(context.Background(), params)
+	err := s.CreateTask(context.Background(), params)
 
 	if err != nil {
 		return err
 	}
 
-	task.Id = Id(id)
 	return nil
 }
 

@@ -3,12 +3,12 @@ SELECT id, name, done, created, type
 FROM tasks
 WHERE type = ?;
 
--- name: CreateTask :one
+-- name: CreateTask :exec
 INSERT INTO tasks (
-    name, done, created, type 
+    name, created, type, done
 ) VALUES (
-    ?, ?, ?, ?
-) RETURNING id;
+    ?, ?, ?, null
+);
 
 -- name: DeleteTask :exec
 DELETE FROM tasks

@@ -31,31 +31,23 @@ func (q *Queries) CheckTask(ctx context.Context, id int64) error {
 	return err
 }
 
-const createTask = `-- name: CreateTask :one
+const createTask = `-- name: CreateTask :exec
 INSERT INTO tasks (
-    name, done, created, type 
+    name, created, type, done
 ) VALUES (
-    ?, ?, ?, ?
-) RETURNING id
+    ?, ?, ?, null
+)
 `
 
 type CreateTaskParams struct {
-	Name    string      `json:"name"`
-	Done    interface{} `json:"done"`
-	Created int64       `json:"created"`
-	Type    int64       `json:"type"`
+	Name    string `json:"name"`
+	Created int64  `json:"created"`
+	Type    int64  `json:"type"`
 }
 
-func (q *Queries) CreateTask(ctx context.Context, arg CreateTaskParams) (int64, error) {
-	row := q.db.QueryRowContext(ctx, createTask,
-		arg.Name,
-		arg.Done,
-		arg.Created,
-		arg.Type,
-	)
-	var id int64
-	err := row.Scan(&id)
-	return id, err
+func (q *Queries) CreateTask(ctx context.Context, arg CreateTaskParams) error {
+	_, err := q.db.ExecContext(ctx, createTask, arg.Name, arg.Created, arg.Type)
+	return err
 }
 
 const deleteAllTasks = `-- name: DeleteAllTasks :exec
