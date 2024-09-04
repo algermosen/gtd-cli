@@ -3,12 +3,12 @@ SELECT id, name, done, created, type
 FROM tasks
 WHERE type = ?;
 
--- name: CreateItem :exec
+-- name: CreateTask :one
 INSERT INTO tasks (
     name, done, created, type 
 ) VALUES (
     ?, ?, ?, ?
-);
+) RETURNING id;
 
 -- name: DeleteTask :exec
 DELETE FROM tasks
@@ -17,14 +17,17 @@ WHERE id = ?;
 -- name: UpdateTask :exec
 UPDATE tasks
 SET name = ?
-WHERE id = ?
+WHERE id = ?;
 
---
--- CREATE TABLE task (
---     id INTEGER PRIMARY KEY NOT NULL,
---     name TEXT NOT NULL,
---     done INTEGER NULL,
---     created INTEGER NOT NULL,
---     type INTEGER NOT NULL
--- )
---
+-- name: CheckTask :exec
+UPDATE tasks
+SET done = DATE()
+WHERE id = ?;
+
+-- name: CheckAllTasks :exec
+UPDATE tasks
+SET done = DATE()
+WHERE done is null;
+
+-- name: DeleteAllTasks :exec
+DELETE FROM tasks;

@@ -4,3 +4,4 @@ run:
 sqlc:
 	sqlc generate -f ./data/sqlite/sqlc.yaml
 	@echo "sqlc done!"
+

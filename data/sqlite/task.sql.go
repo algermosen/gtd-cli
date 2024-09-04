@@ -9,28 +9,61 @@ import (
 	"context"
 )
 
-const createItem = `-- name: CreateItem :exec
+const checkAllTasks = `-- name: CheckAllTasks :exec
+UPDATE tasks
+SET done = DATE()
+WHERE done is null
+`
+
+func (q *Queries) CheckAllTasks(ctx context.Context) error {
+	_, err := q.db.ExecContext(ctx, checkAllTasks)
+	return err
+}
+
+const checkTask = `-- name: CheckTask :exec
+UPDATE tasks
+SET done = DATE()
+WHERE id = ?
+`
+
+func (q *Queries) CheckTask(ctx context.Context, id int64) error {
+	_, err := q.db.ExecContext(ctx, checkTask, id)
+	return err
+}
+
+const createTask = `-- name: CreateTask :one
 INSERT INTO tasks (
     name, done, created, type 
 ) VALUES (
     ?, ?, ?, ?
-)
+) RETURNING id
 `
 
-type CreateItemParams struct {
+type CreateTaskParams struct {
 	Name    string      `json:"name"`
 	Done    interface{} `json:"done"`
 	Created int64       `json:"created"`
 	Type    int64       `json:"type"`
 }
 
-func (q *Queries) CreateItem(ctx context.Context, arg CreateItemParams) error {
-	_, err := q.db.ExecContext(ctx, createItem,
+func (q *Queries) CreateTask(ctx context.Context, arg CreateTaskParams) (int64, error) {
+	row := q.db.QueryRowContext(ctx, createTask,
 		arg.Name,
 		arg.Done,
 		arg.Created,
 		arg.Type,
 	)
+	var id int64
+	err := row.Scan(&id)
+	return id, err
+}
+
+const deleteAllTasks = `-- name: DeleteAllTasks :exec
+DELETE FROM tasks
+`
+
+func (q *Queries) DeleteAllTasks(ctx context.Context) error {
+	_, err := q.db.ExecContext(ctx, deleteAllTasks)
 	return err
 }
 

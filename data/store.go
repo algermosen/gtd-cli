@@ -5,13 +5,9 @@ type Store interface {
 	Actions() []Task
 	Somedays() []Task
 	Ticklers() []Task
-	Add(Task) error
+	Add(*Task) error
 	Delete(Id) error
 	Check(Id) error
 	CheckAll() error
 	DeleteAll() error
-}
-
-func NewSqliteStore() Store {
-	return &sqliteStore{}
 }
