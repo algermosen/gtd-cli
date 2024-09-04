@@ -11,13 +11,16 @@ func init() {
 }
 
 var addCmd = &cobra.Command{
-	Use:   "add",
+	Use:   "add NAME",
 	Short: "Add new tasks",
+	Args:  cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Print(args)
-		// err := store.Add("")
-		// if err != nil {
-		// 	fmt.Print("Task not created")
-		// }
+		name := args[0]
+
+		err := store.Add(name)
+		if err != nil {
+			fmt.Println("Task not created")
+			fmt.Println(err)
+		}
 	},
 }
