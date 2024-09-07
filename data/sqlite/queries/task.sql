@@ -19,6 +19,11 @@ UPDATE tasks
 SET name = ?
 WHERE id = ?;
 
+-- name: MoveTask :exec
+UPDATE tasks
+SET type = ?
+WHERE id = ?;
+
 -- name: CheckTask :exec
 UPDATE tasks
 SET done = DATE()

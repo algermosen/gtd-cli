@@ -1,5 +1,5 @@
 run:
-	@go run cli/main.go
+	@go run main.go
 
 build:
 	@go build && go install

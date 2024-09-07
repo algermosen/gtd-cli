@@ -10,4 +10,5 @@ type Store interface {
 	Check(Id) error
 	CheckAll() error
 	DeleteAll() error
+	Move(Id, TaskType) error
 }

@@ -104,6 +104,22 @@ func (q *Queries) ListTasks(ctx context.Context, type_ int64) ([]Task, error) {
 	return items, nil
 }
 
+const moveTask = `-- name: MoveTask :exec
+UPDATE tasks
+SET type = ?
+WHERE id = ?
+`
+
+type MoveTaskParams struct {
+	Type int64 `json:"type"`
+	ID   int64 `json:"id"`
+}
+
+func (q *Queries) MoveTask(ctx context.Context, arg MoveTaskParams) error {
+	_, err := q.db.ExecContext(ctx, moveTask, arg.Type, arg.ID)
+	return err
+}
+
 const updateTask = `-- name: UpdateTask :exec
 UPDATE tasks
 SET name = ?

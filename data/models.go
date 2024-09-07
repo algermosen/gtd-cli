@@ -17,6 +17,10 @@ func (t TaskType) Int() int64 {
 	return int64(t)
 }
 
+func (t Id) Int() int64 {
+	return int64(t)
+}
+
 type Task struct {
 	Id      Id
 	Name    string

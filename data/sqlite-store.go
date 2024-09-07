@@ -74,12 +74,7 @@ func (s *sqliteStore) Add(task string) error {
 		Type:    InboxTask.Int(),
 	}
 	err := s.CreateTask(context.Background(), params)
-
-	if err != nil {
-		return err
-	}
-
-	return nil
+	return err
 }
 
 func (s *sqliteStore) Delete(id Id) error {
@@ -99,6 +94,15 @@ func (s *sqliteStore) CheckAll() error {
 
 func (s *sqliteStore) DeleteAll() error {
 	err := s.DeleteAllTasks(context.Background())
+	return err
+}
+
+func (s *sqliteStore) Move(id Id, _type TaskType) error {
+	params := database.MoveTaskParams{
+		ID:   id.Int(),
+		Type: _type.Int(),
+	}
+	err := s.MoveTask(context.Background(), params)
 	return err
 }
 
